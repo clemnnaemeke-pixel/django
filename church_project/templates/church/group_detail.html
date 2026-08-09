@@ -1,0 +1,39 @@
+{% extends 'church/base.html' %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+{% block header %}{{ group.name }}{% endblock %}
+
+{% block content %}
+    <p>{{ group.description }}</p>
+
+    <h2>Leaders</h2>
+    <ul>
+        {% for leader in group.leaders.all %}
+            <li><a href="{% url 'member_detail' member_id=leader.id %}">{{ leader }}</a></li>
+        {% empty %}
+            <li>No leaders assigned.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Members</h2>
+    <ul>
+        {% for member in group.members.all %}
+            <li><a href="{% url 'member_detail' member_id=member.id %}">{{ member }}</a></li>
+        {% empty %}
+            <li>No members assigned.</li>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'group_volunteer_signup' group_id=group.id %}">Volunteer for this group</a></p>
+    {% endif %}
+
+    <h2>Volunteer Signups</h2>
+    <ul>
+        {% for signup in volunteer_signups %}
+            <li>{{ signup.member }} – {{ signup.role|default:'Volunteer' }} ({{ signup.status }})</li>
+        {% empty %}
+            <li>No volunteers signed up for this group yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

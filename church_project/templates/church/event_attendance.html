@@ -1,0 +1,30 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Track Attendance - {{ event.title }}{% endblock %}
+
+{% block header %}Track Attendance - {{ event.title }}{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Present</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td><input type="checkbox" name="members" value="{{ member.id }}"{% if member.id in attended_ids %} checked{% endif %}></td>
+                        <td>{{ member.first_name }} {{ member.last_name }}</td>
+                        <td>{{ member.email }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Save attendance</button>
+    </form>
+{% endblock %}

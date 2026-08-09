@@ -1,0 +1,15 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Church Dashboard{% endblock %}
+
+{% block header %}Church Dashboard{% endblock %}
+
+{% block content %}
+    <p>Use the admin site to manage members, groups, events, donations, volunteer signups, and attendance.</p>
+    <ul>
+        <li>Total members: {{ members_count }}</li>
+        <li>Upcoming events: {{ events_count }}</li>
+        <li>Total donations: ${{ donations_total }}</li>
+        <li>Volunteer signups: {{ volunteer_signups_count }}</li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Volunteer Signup{% endblock %}
+
+{% block header %}Volunteer Signup{% endblock %}
+
+{% block content %}
+    <p>
+        {% if event %}
+            Signing up to volunteer for <strong>{{ event.title }}</strong>.
+        {% elif group %}
+            Signing up to volunteer for group <strong>{{ group.name }}</strong>.
+        {% else %}
+            Sign up to volunteer for a role or activity.
+        {% endif %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-row">
+                {{ field.label_tag }}<br>
+                {{ field }}
+                {% if field.help_text %}
+                    <p>{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">Submit Volunteer Signup</button>
+    </form>
+{% endblock %}

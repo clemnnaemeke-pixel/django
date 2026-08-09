@@ -1,0 +1,28 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Groups{% endblock %}
+
+{% block header %}Groups{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Leaders</th>
+                <th>Members</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td><a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a></td>
+                    <td>{{ group.leaders.all|join:", " }}</td>
+                    <td>{{ group.members.all|length }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No groups available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

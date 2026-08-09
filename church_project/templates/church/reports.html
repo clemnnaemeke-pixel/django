@@ -1,0 +1,98 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block header %}Reports{% endblock %}
+
+{% block content %}
+    <h2>Donation Summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Donation Type</th>
+                <th>Total Amount</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in donation_stats %}
+                <tr>
+                    <td>{{ item.donation_type|default:'Unspecified' }}</td>
+                    <td>${{ item.total }}</td>
+                    <td>{{ item.count }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No donation data available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>
+        {% if user.is_staff %}
+            <a href="{% url 'export_attendance_csv' %}">Download attendance CSV</a>
+        {% endif %}
+    </p>
+
+    <h2>Top Event Attendance</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Attendance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in event_attendance %}
+                <tr>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.attendance_count }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">No attendance data available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Volunteer Signup Summary</h2>
+    <h3>By Role</h3>
+    <table>
+        <thead>
+            <tr><th>Role</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+            {% for item in volunteer_by_role %}
+                <tr><td>{{ item.role|default:'Unspecified' }}</td><td>{{ item.count }}</td></tr>
+            {% empty %}
+                <tr><td colspan="2">No volunteer signup data.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>By Event</h3>
+    <table>
+        <thead>
+            <tr><th>Event</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+            {% for item in volunteer_by_event %}
+                <tr><td>{{ item.event__title }}</td><td>{{ item.count }}</td></tr>
+            {% empty %}
+                <tr><td colspan="2">No volunteer signups for events.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>By Group</h3>
+    <table>
+        <thead>
+            <tr><th>Group</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+            {% for item in volunteer_by_group %}
+                <tr><td>{{ item.group__name }}</td><td>{{ item.count }}</td></tr>
+            {% empty %}
+                <tr><td colspan="2">No volunteer signups for groups.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

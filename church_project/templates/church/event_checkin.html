@@ -1,0 +1,27 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Event Check-in{% endblock %}
+
+{% block header %}Event Check-in - {{ event.title }}{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    {% if member %}
+        <p>Found member: <strong>{{ member }}</strong></p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-row">
+                {{ field.label_tag }}
+                {{ field }}
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">Check in</button>
+    </form>
+{% endblock %}

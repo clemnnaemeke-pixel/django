@@ -1,0 +1,42 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Members{% endblock %}
+
+{% block header %}Members{% endblock %}
+
+{% block content %}
+    <p><a href="{% url 'member_add' %}">Add member</a></p>
+    <form method="get">
+        <label>Search: <input type="text" name="q" value="{{ query }}"></label>
+        <label>Active:
+            <select name="active">
+                <option value="">Any</option>
+                <option value="true"{% if active == 'true' %} selected{% endif %}>Active</option>
+                <option value="false"{% if active == 'false' %} selected{% endif %}>Inactive</option>
+            </select>
+        </label>
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+                <tr>
+                    <td><a href="{% url 'member_detail' member_id=member.id %}">{{ member.first_name }} {{ member.last_name }}</a></td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.phone }}</td>
+                    <td>{{ member.is_active }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">No members found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

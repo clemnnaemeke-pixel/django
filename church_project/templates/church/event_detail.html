@@ -1,0 +1,67 @@
+{% extends 'church/base.html' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block header %}{{ event.title }}{% endblock %}
+
+{% block content %}
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Start:</strong> {{ event.start_time }}</p>
+    <p><strong>End:</strong> {{ event.end_time }}</p>
+    <p>{{ event.description }}</p>
+
+    <h2>Register Attendance</h2>
+    {% if user.is_authenticated %}
+        <p>
+            <a href="{% url 'event_checkin' event_id=event.id %}">Check in by email/phone</a>
+            | <a href="{% url 'event_volunteer_signup' event_id=event.id %}">Volunteer for this event</a>
+        </p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-row">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <p>{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Attendees</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Member</th>
+                <th>Status</th>
+                <th>Checked in</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in event.attendance_set.all %}
+                <tr>
+                    <td>{{ attendance.member }}</td>
+                    <td>{{ attendance.status }}</td>
+                    <td>{{ attendance.checked_in_at }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No attendees yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Volunteer Signups</h2>
+    <ul>
+        {% for signup in volunteer_signups %}
+            <li>{{ signup.member }} – {{ signup.role|default:'Volunteer' }} ({{ signup.status }})</li>
+        {% empty %}
+            <li>No volunteers signed up yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

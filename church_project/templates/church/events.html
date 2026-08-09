@@ -1,0 +1,41 @@
+{% extends 'church/base.html' %}
+
+{% block title %}Events{% endblock %}
+
+{% block header %}Upcoming Events{% endblock %}
+
+{% block content %}
+    <p><a href="{% url 'event_add' %}">Add event</a></p>
+    <form method="get">
+        <label>Search: <input type="text" name="q" value="{{ query }}"></label>
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td><a href="{% url 'event_detail' event_id=event.id %}">{{ event.title }}</a></td>
+                    <td>{{ event.location }}</td>
+                    <td>{{ event.start_time }}</td>
+                    <td>{{ event.end_time }}</td>
+                    <td>
+                        <a href="{% url 'event_detail' event_id=event.id %}">View</a>
+                        <a href="{% url 'event_attendance' event_id=event.id %}">Attendance</a>
+                        <a href="{% url 'event_edit' event_id=event.id %}">Edit</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">No events scheduled.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

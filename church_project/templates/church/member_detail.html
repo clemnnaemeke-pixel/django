@@ -1,0 +1,67 @@
+{% extends 'church/base.html' %}
+
+{% block title %}{{ member.first_name }} {{ member.last_name }}{% endblock %}
+
+{% block header %}{{ member.first_name }} {{ member.last_name }}{% endblock %}
+
+{% block content %}
+    <h2>Contact</h2>
+    <p><strong>Email:</strong> {{ member.email }}</p>
+    <p><strong>Phone:</strong> {{ member.phone }}</p>
+    <p><strong>Active:</strong> {{ member.is_active }}</p>
+
+    <h2>Groups</h2>
+    <ul>
+        {% for group in groups %}
+            <li>{{ group.name }}</li>
+        {% empty %}
+            <li>No group memberships.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Donations</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donation in donations %}
+                <tr>
+                    <td>${{ donation.amount }}</td>
+                    <td>{{ donation.donation_type }}</td>
+                    <td>{{ donation.donated_at }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No donations.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Event Attendance</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                {% with attendance=event.attendance_set.get(member=member) %}
+                    <tr>
+                        <td><a href="{% url 'event_detail' event_id=event.id %}">{{ event.title }}</a></td>
+                        <td>{{ attendance.status }}</td>
+                        <td>{{ attendance.checked_in_at }}</td>
+                    </tr>
+                {% endwith %}
+            {% empty %}
+                <tr><td colspan="3">No attendance records yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

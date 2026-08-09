@@ -1,0 +1,21 @@
+{% extends 'church/base.html' %}
+
+{% block title %}{% if event %}Edit{% else %}Add{% endif %} Event{% endblock %}
+
+{% block header %}{% if event %}Edit{% else %}Add{% endif %} Event{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-row">
+                {{ field.label_tag }}
+                {{ field }}
+                {% for error in field.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit">Save Event</button>
+    </form>
+{% endblock %}
