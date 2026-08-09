@@ -4,6 +4,9 @@
       "runtime": "python3.12"
     }
   },
+  "env": {
+    "PYTHONPATH": "church_project"
+  },
   "routes": [
     { "src": "/(.*)", "dest": "/api/wsgi.py" }
   ]
